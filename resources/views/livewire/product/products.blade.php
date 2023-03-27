@@ -6,8 +6,8 @@
         </div>
         <div class="mt-8 text-2xl font-medium text-gray-900">
             <div class="mr-2">
-                <x-button wire:click="confirmProductAdd" >
-                    <a href="{{ route('product.product-create') }}">Add New Product</a>
+                <x-button wire:click="confirmProductAdd()" wire:loading.attr="disabled" >
+                    {{ __('Add new product') }}
                 </x-button>
             </div>
         </div>
@@ -44,13 +44,15 @@
                         </div>
                     </th>
                     <th class="px-2 py-2 w-40">
-                        Status
+                        <button wire:click="sortBy('status')" >Status</button>
+                        <x-sort-icon sortField="status" :sort-by="$sortBy" :sort-asc="$sortAsc" />
                     </th>
                     <th class="px-2 py-2 w-48">
                         Action
                     </th>
                     <th class="px-2 py-2 w-60">
-                        Date Created
+                        <button wire:click="sortBy('created_at')" >Date Created</button>
+                        <x-sort-icon sortField="created_at" :sort-by="$sortBy" :sort-asc="$sortAsc" />
                     </th>
                 </tr>
             </thead>
@@ -100,4 +102,48 @@
             </x-slot>
         </x-dialog-modal>
     </p>
+
+    <p>
+        <!-- Add a new product Confirmation Modal -->
+        <x-dialog-modal wire:model="confirmingProductAdd">
+            <x-slot name="title">
+                {{ __('Add Product') }}
+            </x-slot>
+
+            <x-slot name="content">
+                    <!-- Product Name -->
+                    <div class="col-span-6 sm:col-span-4">
+                        <x-label for="product_name" value="{{ __('Product Name') }}" />
+                        <x-input id="product_name" type="text" class="mt-1 block w-full" wire:model.defer="product.product_name" />
+                        <x-input-error for="product.product_name" class="mt-2" />
+                    </div>
+
+                    <!-- Product Name -->
+                    <div class="col-span-6 sm:col-span-4">
+                        <x-label for="price" value="{{ __('Price') }}" />
+                        <x-input id="price" type="text" class="mt-1 block w-full" wire:model.defer="product.price" />
+                        <x-input-error for="product.price" class="mt-2" />
+                    </div>
+
+                    <!-- Status -->
+                    <div class="col-span-6 sm:col-span-4">
+                        <x-label for="status" value="{{ __('Status') }}" />
+                        <x-checkbox id="status" type="checkbox" class="mt-1" wire:model.defer="product.status" />
+                        <x-input-error for="product.status" class="mt-2" />
+                    </div>
+
+            </x-slot>
+
+            <x-slot name="footer">
+                <x-secondary-button wire:click="$set('confirmingProductAdd',  false)" wire:loading.attr="disabled">
+                    {{ __('Cancel') }}
+                </x-secondary-button>
+
+                <x-danger-button class="ml-3" wire:click="createProduct()" wire:loading.attr="disabled">
+                    {{ __('Add Product') }}
+                </x-danger-button>
+            </x-slot>
+        </x-dialog-modal>
+    </p>
+
 </div>

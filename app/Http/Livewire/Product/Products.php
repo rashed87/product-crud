@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Livewire;
-
+namespace App\Http\Livewire\Product;
 use Livewire\Component;
 use App\Models\Product;
 use Livewire\WithPagination;
+use Flasher\Prime\FlasherInterface;
 
 class Products extends Component
 {
     use WithPagination;
 
+    public $product;
     public $active;
     public $q;
     public $sortBy = 'id';
@@ -69,19 +70,32 @@ class Products extends Component
     }
     public function confirmProductDeletion( $id )
     {
-        //$product->delete();
         $this->confirmingProductDeletion = $id;
     }
-    public function deleteProduct( Product $product )
+    public function deleteProduct( Product $product, FlasherInterface $flasher )
     {
         $product->delete();
         $this->confirmingProductDeletion = false;
+        $flasher->addSuccess('The product was removed successfully.');
     }
 
 
     public function confirmProductAdd()
     {
         $this->confirmingProductAdd = true;
+    }
+    public function createProduct( FlasherInterface $flasher )
+    {
+        $this->validate();
+
+        auth()->user()->products()->create([
+            'product_name' => $this->product['product_name'],
+            'price' => $this->product['price'],
+            'status' => $this->product['status'] ?? 0
+        ]);
+        $this->confirmingProductAdd = false;
+        $this->reset(['product']);
+        $flasher->addSuccess('The product was created successfully.');
     }
 
 
