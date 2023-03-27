@@ -7,7 +7,7 @@
         <div class="mt-8 text-2xl font-medium text-gray-900">
             <div class="mr-2">
                 <x-button wire:click="confirmProductAdd" >
-                    Add New Product
+                    <a href="{{ route('product.product-create') }}">Add New Product</a>
                 </x-button>
             </div>
         </div>

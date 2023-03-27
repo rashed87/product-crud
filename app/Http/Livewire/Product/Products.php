@@ -83,10 +83,6 @@ class Products extends Component
     {
         $this->confirmingProductAdd = true;
     }
-    public function createProduct()
-    {
-        $this->confirmingProductAdd = true;
-    }
 
 
 }
